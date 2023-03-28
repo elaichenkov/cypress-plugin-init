@@ -1,6 +1,6 @@
 {
   "name": "cypress-plugin-init",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "cypress-plugin-init is a library that simplifies the process of setting up multiple Cypress plugins in your project",
   "main": "build/index.js",
   "files": [
