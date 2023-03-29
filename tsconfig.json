@@ -30,7 +30,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "skipLibCheck": true,
     "types": ["node", "cypress"],
-    "declaration": true
+    "declaration": false,
   },
-  "exclude": ["./cypress.config.js", "cypress"]
+  "exclude": ["cypress.config.js", "cypress"]
 }

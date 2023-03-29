@@ -1,41 +1,37 @@
-type EventName =
-  | 'after:run'
-  | 'after:screenshot'
-  | 'after:spec'
-  | 'before:spec'
-  | 'before:run'
-  | 'before:browser:launch'
-  | 'file:preprocessor'
-  | 'dev-server:start'
-  | 'task';
+type EventCallback = (...args: any[]) => void | Promise<void>;
 
-type CallbackFn = (
-  results: CypressCommandLine.CypressRunResult | CypressCommandLine.CypressFailedRunResult | Cypress.BeforeRunDetails,
-) => void | Promise<void>;
+type PluginFn = (
+  callback: (eventName: string, callback: EventCallback) => void,
+  config?: Cypress.ConfigOptions,
+) => void;
 
-type PluginFunction = (registerCallback: (eventName: EventName, callback: CallbackFn) => void) => void;
+export function initPlugins(on: Cypress.PluginEvents, plugins: PluginFn[], config?: Cypress.ConfigOptions) {
+  const eventCallbacks: { [eventName: string]: { [pluginName: string]: EventCallback[] } } = {};
 
-type EventCallbacks = {
-  [K in EventName]?: CallbackFn[];
-};
+  plugins.forEach((plugin, index) => {
+    const pluginName = `plugin-${index}`;
 
-export function initPlugins(on: Cypress.PluginEvents, plugins: PluginFunction[]) {
-  const eventCallbacks: EventCallbacks = {};
-
-  plugins.forEach((plugin) => {
-    plugin((eventName, callback) => {
+    plugin((eventName: string, callback: EventCallback) => {
       if (!eventCallbacks[eventName]) {
-        eventCallbacks[eventName] = [];
-        // @ts-ignore https://github.com/cypress-io/cypress/issues/9571
-        on(eventName, async (results) => {
-          for (const callbackFn of eventCallbacks[eventName]!) {
-            await callbackFn(results);
-          }
-        });
+        eventCallbacks[eventName] = {};
       }
-      eventCallbacks[eventName]?.push(async (results) => {
-        await callback(results);
+      if (!eventCallbacks[eventName]![pluginName]) {
+        eventCallbacks[eventName]![pluginName] = [];
+      }
+
+      eventCallbacks[eventName]![pluginName]?.push(callback);
+
+      // @ts-ignore
+      on(eventName, async (...args) => {
+        const pluginCallbacks = Object.values(eventCallbacks[eventName] || {}).flat();
+        for (const pluginCallback of pluginCallbacks) {
+          if (plugin.length > 1) {
+            await pluginCallback(...args, config);
+          } else {
+            await pluginCallback(...args);
+          }
+        }
       });
-    });
+    }, config);
   });
 }
