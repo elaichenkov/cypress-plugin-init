@@ -78,6 +78,25 @@ export default defineConfig({
 
 ```
 
+If any of the plugins you want to initialize is expecting `config` as a parameter, you can pass it as a third parameter to the `initPlugins` function.
+
+```ts
+import { initPlugins } from 'cypress-plugin-init';
+
+export default defineConfig({
+  e2e: {
+    // ...
+
+    setupNodeEvents(on, config) {
+      // Initialize all plugins you want to use in your project
+      initPlugins(on, [plugin1, plugin2], config);
+    },
+
+    // ...
+  },
+});
+```
+
 ## License
 
 [MIT](LICENSE)
