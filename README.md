@@ -4,7 +4,9 @@ This library was designed to overcome the limitations of the Cypress plugin syst
 
 ## Motivation
 
-The Cypress plugin system is a great way to extend the Cypress functionality. However, it has some limitations. One of them is that you can only have one listener for a specific event. This means that if you want to use multiple plugins that listen to the same event, you can't do it. This library was designed to overcome this limitation. For instance, if you have two plugins that are listening to the `before:run` event, you can initialize both of them with this library.
+The Cypress plugin system is a great way to extend the Cypress functionality. However, it has some limitations. One of them is that you can only have one listener for a specific event. This means that if you want to use multiple plugins that listen to the same event, you can't do it. This library was designed to overcome this limitation. 
+
+For instance, if you have two plugins that are listening to the `before:run` event, you can initialize both of them with this library.
 
 ```ts
 import { defineConfig } from 'cypress';
