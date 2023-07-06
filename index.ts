@@ -15,7 +15,7 @@ export function initPlugins(on: Cypress.PluginEvents, plugins: PluginFn[], confi
       if (eventName === 'task') {
         // @ts-ignore
         return on('task', callback)
-    };
+      };
 
       if (!eventCallbacks[eventName]) {
         eventCallbacks[eventName] = {};
