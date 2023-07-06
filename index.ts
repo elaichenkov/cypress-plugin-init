@@ -12,6 +12,11 @@ export function initPlugins(on: Cypress.PluginEvents, plugins: PluginFn[], confi
     const pluginName = `plugin-${index}`;
 
     plugin((eventName: string, callback: EventCallback) => {
+      if (eventName === 'task') {
+        // @ts-ignore
+        return on('task', callback)
+    };
+
       if (!eventCallbacks[eventName]) {
         eventCallbacks[eventName] = {};
       }
