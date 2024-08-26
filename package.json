@@ -35,7 +35,7 @@
   "homepage": "https://github.com/elaichenkov/cypress-plugin-init#readme",
   "devDependencies": {
     "@types/cypress": "^1.1.3",
-    "@types/node": "^20.1.0",
+    "@types/node": "^22.5.0",
     "cypress": "^13.1.0",
     "release-it": "^17.0.0",
     "typescript": "^5.0.2"
